@@ -21,6 +21,7 @@ data class CoinType(val value: String)
 data class Quantity(val value: BigDecimal) {
     constructor(value: Int) : this(value.toBigDecimal())
 
+    operator fun plus(that: Quantity) = Quantity(value + that.value)
     override fun toString() = value.toString()
 }
 

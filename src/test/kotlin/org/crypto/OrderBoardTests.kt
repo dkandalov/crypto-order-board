@@ -2,6 +2,7 @@ package org.crypto
 
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
+import com.natpryce.hamkrest.hasElement
 import com.natpryce.hamkrest.isEmpty
 import org.crypto.OrderType.Buy
 import org.crypto.OrderType.Sell
@@ -48,5 +49,26 @@ class OrderBoardTests {
         orderBoard.cancel(order)
 
         assertThat(orderBoard.summary(Sell, someCoin), isEmpty)
+    }
+
+    @Test fun `orders for the same price and coin type are merged`() {
+        val orderBoard = OrderBoard()
+        orderBoard.place(Order(Sell, someUser, someCoin, Quantity(10), Price(123)))
+        orderBoard.place(Order(Sell, UserId("anotherUserId"), someCoin, Quantity(2), Price(123)))
+
+        assertThat(
+            orderBoard.summary(Sell, someCoin),
+            equalTo(listOf(SummaryRow(Quantity(12), Price(123))))
+        )
+    }
+
+    @Test fun `orders for different price are not merged`() {
+        val orderBoard = OrderBoard()
+        orderBoard.place(Order(Sell, someUser, someCoin, Quantity(10), Price(1)))
+        orderBoard.place(Order(Sell, someUser, someCoin, Quantity(20), Price(2)))
+
+        val summary = orderBoard.summary(Sell, someCoin)
+        assertThat(summary, hasElement(SummaryRow(Quantity(10), Price(1))))
+        assertThat(summary, hasElement(SummaryRow(Quantity(20), Price(2))))
     }
 }

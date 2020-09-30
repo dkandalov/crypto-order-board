@@ -1,5 +1,8 @@
 package org.crypto
 
+import java.util.*
+import kotlin.collections.ArrayList
+
 class OrderBoard {
     private val orders = ArrayList<Order>()
 
@@ -11,6 +14,11 @@ class OrderBoard {
         return orders
             .filter { it.type == orderType }
             .map { SummaryRow(it.quantity, it.pricePerCoin) }
+            .groupingBy { it.pricePerCoin }
+            .reduce { _, accumulator, summaryRow ->
+                accumulator.copy(quantity = accumulator.quantity + summaryRow.quantity)
+            }
+            .values.toList()
     }
 
     fun cancel(order: Order) {
