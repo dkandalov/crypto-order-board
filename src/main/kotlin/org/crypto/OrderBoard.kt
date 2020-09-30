@@ -12,7 +12,7 @@ class OrderBoard {
 
     fun summary(orderType: OrderType, coinType: CoinType): List<SummaryRow> {
         return orders
-            .filter { it.type == orderType }
+            .filter { it.type == orderType && it.coinType == coinType }
             .map { SummaryRow(it.quantity, it.pricePerCoin) }
             .groupingBy { it.pricePerCoin }
             .reduce { _, accumulator, summaryRow ->

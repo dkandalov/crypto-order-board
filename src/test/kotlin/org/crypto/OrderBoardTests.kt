@@ -71,4 +71,19 @@ class OrderBoardTests {
         assertThat(summary, hasElement(SummaryRow(Quantity(10), Price(1))))
         assertThat(summary, hasElement(SummaryRow(Quantity(20), Price(2))))
     }
+
+    @Test fun `orders for different coin type are not merged`() {
+        val orderBoard = OrderBoard()
+        orderBoard.place(Order(Sell, someUser, CoinType("CoinA"), Quantity(1), Price(123)))
+        orderBoard.place(Order(Sell, someUser, CoinType("CoinB"), Quantity(2), Price(123)))
+
+        assertThat(
+            orderBoard.summary(Sell, CoinType("CoinA")),
+            equalTo(listOf(SummaryRow(Quantity(1), Price(123))))
+        )
+        assertThat(
+            orderBoard.summary(Sell, CoinType("CoinB")),
+            equalTo(listOf(SummaryRow(Quantity(2), Price(123))))
+        )
+    }
 }
