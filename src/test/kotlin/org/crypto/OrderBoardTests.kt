@@ -117,4 +117,19 @@ class OrderBoardTests {
             ))
         )
     }
+
+    @Test fun `summary has at most the specified amount of rows`() {
+        val orderBoard = OrderBoard()
+        orderBoard.place(Order(Sell, someUser, someCoin, someQuantity, Price(1)))
+        orderBoard.place(Order(Sell, someUser, someCoin, someQuantity, Price(2)))
+        orderBoard.place(Order(Sell, someUser, someCoin, someQuantity, Price(3)))
+        orderBoard.place(Order(Sell, someUser, someCoin, someQuantity, Price(4)))
+
+        assertThat(
+            orderBoard.summary(Sell, someCoin, maxRows = 2), equalTo(listOf(
+                SummaryRow(someQuantity, Price(1)),
+                SummaryRow(someQuantity, Price(2))
+            ))
+        )
+    }
 }

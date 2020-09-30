@@ -11,7 +11,7 @@ class OrderBoard {
         orders.add(order)
     }
 
-    fun summary(orderType: OrderType, coinType: CoinType): List<SummaryRow> {
+    fun summary(orderType: OrderType, coinType: CoinType, maxRows: Int = 10): List<SummaryRow> {
         val priceComparator =
             if (orderType == Sell) compareBy { it.value }
             else compareBy<Price> { -it.value }
@@ -23,7 +23,7 @@ class OrderBoard {
             .reduceTo(TreeMap(priceComparator)) { _, accumulator, summaryRow ->
                 accumulator.copy(quantity = accumulator.quantity + summaryRow.quantity)
             }
-            .values.toList()
+            .values.take(maxRows)
     }
 
     fun cancel(order: Order) {
