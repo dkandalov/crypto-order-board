@@ -39,4 +39,14 @@ class OrderBoardTests {
         )
         assertThat(orderBoard.summary(Sell, someCoin), isEmpty)
     }
+
+    @Test fun `cancelled orders are removed from summary`() {
+        val orderBoard = OrderBoard()
+        val order = Order(Sell, someUser, someCoin, Quantity(1), Price(2))
+
+        orderBoard.place(order)
+        orderBoard.cancel(order)
+
+        assertThat(orderBoard.summary(Sell, someCoin), isEmpty)
+    }
 }

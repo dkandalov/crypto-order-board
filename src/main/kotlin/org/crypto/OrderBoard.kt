@@ -12,6 +12,10 @@ class OrderBoard {
             .filter { it.type == orderType }
             .map { SummaryRow(it.quantity, it.pricePerCoin) }
     }
+
+    fun cancel(order: Order) {
+        orders.remove(order)
+    }
 }
 
 data class SummaryRow(
