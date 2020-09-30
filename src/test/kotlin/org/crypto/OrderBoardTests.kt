@@ -103,4 +103,18 @@ class OrderBoardTests {
         )
     }
 
+    @Test fun `buy orders are sorted from low to high price`() {
+        val orderBoard = OrderBoard()
+        orderBoard.place(Order(Buy, someUser, someCoin, someQuantity, Price(2)))
+        orderBoard.place(Order(Buy, someUser, someCoin, someQuantity, Price(1)))
+        orderBoard.place(Order(Buy, someUser, someCoin, someQuantity, Price(3)))
+
+        assertThat(
+            orderBoard.summary(Buy, someCoin), equalTo(listOf(
+                SummaryRow(someQuantity, Price(3)),
+                SummaryRow(someQuantity, Price(2)),
+                SummaryRow(someQuantity, Price(1))
+            ))
+        )
+    }
 }
