@@ -132,4 +132,20 @@ class OrderBoardTests {
             ))
         )
     }
+
+    @Test fun `printable summary`() {
+        val summary = listOf(
+            SummaryRow(Quantity("123.45"), Price("234.5")),
+            SummaryRow(Quantity("12"), Price("34")),
+            SummaryRow(Quantity("0.1"), Price("0.2"))
+        )
+        assertThat(
+            summary.toPrintableString(),
+            equalTo("""
+                |123.45 for ￡234.5
+                |12 for ￡34
+                |0.1 for ￡0.2
+            """.trimMargin())
+        )
+    }
 }

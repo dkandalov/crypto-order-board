@@ -35,3 +35,11 @@ data class SummaryRow(
     val quantity: Quantity,
     val pricePerCoin: Price
 )
+
+fun List<SummaryRow>.toPrintableString(): String {
+    return joinToString("\n") {
+        val quantity = it.quantity.value.toString()
+        val price = it.pricePerCoin.value.toString()
+        "$quantity for ￡$price"
+    }
+}
