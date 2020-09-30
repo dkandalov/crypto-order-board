@@ -6,7 +6,6 @@ import com.natpryce.hamkrest.isEmpty
 import org.crypto.OrderType.Buy
 import org.crypto.OrderType.Sell
 import org.junit.jupiter.api.Test
-import java.math.BigDecimal
 
 
 class OrderBoardTests {
@@ -40,52 +39,4 @@ class OrderBoardTests {
         )
         assertThat(orderBoard.summary(Sell, someCoin), isEmpty)
     }
-
-}
-
-class OrderBoard {
-    private val orders = ArrayList<Order>()
-
-    fun place(order: Order) {
-        orders.add(order)
-    }
-
-    fun summary(orderType: OrderType, coinType: CoinType): List<SummaryRow> {
-        return orders
-            .filter { it.type == orderType }
-            .map { SummaryRow(it.quantity, it.pricePerCoin) }
-    }
-}
-
-data class SummaryRow(
-    val quantity: Quantity,
-    val pricePerCoin: Price
-)
-
-data class Order(
-    val type: OrderType,
-    val userId: UserId,
-    val coinType: CoinType,
-    val quantity: Quantity,
-    val pricePerCoin: Price
-)
-
-enum class OrderType {
-    Buy, Sell
-}
-
-data class UserId(val value: String)
-
-data class CoinType(val value: String)
-
-data class Quantity(val value: BigDecimal) {
-    constructor(value: Int) : this(value.toBigDecimal())
-
-    override fun toString() = value.toString()
-}
-
-data class Price(val value: BigDecimal) {
-    constructor(value: Int) : this(value.toBigDecimal())
-
-    override fun toString() = value.toString()
 }
