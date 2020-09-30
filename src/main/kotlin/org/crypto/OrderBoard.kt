@@ -15,7 +15,7 @@ class OrderBoard {
             .filter { it.type == orderType && it.coinType == coinType }
             .map { SummaryRow(it.quantity, it.pricePerCoin) }
             .groupingBy { it.pricePerCoin }
-            .reduce { _, accumulator, summaryRow ->
+            .reduceTo(TreeMap(compareBy { it.value })) { _, accumulator, summaryRow ->
                 accumulator.copy(quantity = accumulator.quantity + summaryRow.quantity)
             }
             .values.toList()

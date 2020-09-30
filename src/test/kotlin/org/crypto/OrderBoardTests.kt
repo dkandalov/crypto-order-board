@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test
 class OrderBoardTests {
     private val someCoin = CoinType("someCoin")
     private val someUser = UserId("someUserId")
+    private val someQuantity = Quantity(123)
 
     @Test fun `summary for empty order board`() {
         val emptyOrderBoard = OrderBoard()
@@ -86,4 +87,20 @@ class OrderBoardTests {
             equalTo(listOf(SummaryRow(Quantity(2), Price(123))))
         )
     }
+
+    @Test fun `sell orders are sorted from low to high price`() {
+        val orderBoard = OrderBoard()
+        orderBoard.place(Order(Sell, someUser, someCoin, someQuantity, Price(2)))
+        orderBoard.place(Order(Sell, someUser, someCoin, someQuantity, Price(1)))
+        orderBoard.place(Order(Sell, someUser, someCoin, someQuantity, Price(3)))
+
+        assertThat(
+            orderBoard.summary(Sell, someCoin), equalTo(listOf(
+                SummaryRow(someQuantity, Price(1)),
+                SummaryRow(someQuantity, Price(2)),
+                SummaryRow(someQuantity, Price(3))
+            ))
+        )
+    }
+
 }
