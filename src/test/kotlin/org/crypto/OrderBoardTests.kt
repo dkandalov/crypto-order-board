@@ -148,4 +148,22 @@ class OrderBoardTests {
             """.trimMargin())
         )
     }
+
+    @Test fun `example from the task`() {
+        val orderBoard = OrderBoard()
+        val ethereum = CoinType("Ethereum")
+        orderBoard.place(Order(Sell, UserId("user1"), ethereum, Quantity("350.1"), Price("13.6")))
+        orderBoard.place(Order(Sell, UserId("user2"), ethereum, Quantity("50.5"), Price("14")))
+        orderBoard.place(Order(Sell, UserId("user3"), ethereum, Quantity("441.8"), Price("13.9")))
+        orderBoard.place(Order(Sell, UserId("user4"), ethereum, Quantity("3.5"), Price("13.6")))
+
+        assertThat(
+            orderBoard.summary(Sell, ethereum).toPrintableString(),
+            equalTo("""
+                |353.6 for ￡13.6
+                |441.8 for ￡13.9
+                |50.5 for ￡14
+            """.trimMargin())
+        )
+    }
 }
